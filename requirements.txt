@@ -1,0 +1,3 @@
+openai==2.21.0
+python-dotenv
+pathlib
