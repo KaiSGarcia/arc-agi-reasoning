@@ -1,0 +1,143 @@
+import json
+import os
+import re
+from pathlib import Path
+from dotenv import load_dotenv
+from openai import OpenAI
+import ast
+
+# Loading environment variables
+load_dotenv()
+api_key = os.getenv('DEEPSEEK_API_KEY')
+
+SCRIPT_DIR = Path(__file__).parent.parent # eval --> scripts
+BASE_DIR = SCRIPT_DIR.parent 
+DATA_DIR = BASE_DIR / "data"
+RESULTS_DIR = BASE_DIR / "results"
+
+
+def clean_matrix(s):
+    s = s.strip().replace("'", '"')
+    try:
+        obj = json.loads(s)
+        if isinstance(obj, list) and obj and isinstance(obj[0], list):
+            return obj
+    except Exception:
+        pass
+    try:
+        obj = ast.literal_eval(s.replace('"', "'"))
+        if isinstance(obj, list) and obj and isinstance(obj[0], list):
+            return obj
+    except Exception:
+        pass
+    return None
+
+
+def extract_final_answer(text):
+    if not text:
+        return None
+
+    match = re.search(r'FINAL_ANSWER:\s*(\[\s*\[[\s\S]*?\]\s*\])', text) # look for cutoff point
+    if match:
+        result = clean_matrix(match.group(1))
+        if result is not None:
+            return result
+
+    matches = re.findall(r'\[\s*\[[\s\S]*?\]\s*\]', text) # look for matrices (backup, in case cutoff doesn't work)
+    if matches:
+        result = clean_matrix(matches[-1]) # get the last matrix (should be output)
+        if result is not None:
+            return result
+
+    return None
+
+
+def query_model(prob_file):
+    client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+    
+    with open(prob_file, 'r') as f:
+        problem = json.load(f)
+
+    prompt = (
+    "You are an expert at solving abstract reasoning puzzles. These puzzles consist "
+    "of an input grid, to which a transformation rule is applied, producing an output grid.\n"
+    "Rules: Each number 0-9 represents a color. Here are some few-shot examples. \n\n"
+    "Few-Shot Examples:\n"
+    )
+    
+    for i, example in enumerate(problem['train']):
+        prompt += f"Example {i+1} Input: {example['input']}\n"
+        prompt += f"Example {i+1} Output: {example['output']}\n\n"
+    
+    test_input = problem['test'][0]['input']
+
+    prompt += (
+        "Your task is to extrapolate the transformation rule from the few-shot examples and apply it to the given test input.\n\n"
+        f"Test Input: {test_input}\n\n"
+        "Output your final answer on the last line in this exact format:\n"
+        "FINAL_ANSWER: [[row1], [row2], ...]\n\n"
+        "Example:\n"
+        "FINAL_ANSWER: [[0, 1, 2], [3, 4, 5]]\n\n"
+        "Do not output anything after the FINAL_ANSWER line."
+    )
+
+    completion = client.chat.completions.create(
+        model="deepseek-v4-flash",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=1.0
+    )
+
+    solution_text = completion.choices[0].message.content or "" # model's raw output
+    reasoning = completion.choices[0].message.reasoning_content or "" # reasoning trace
+    parsed_matrix = extract_final_answer(solution_text) # convert answer matrix (string) into list-of-lists matrix (for comparison)
+
+    return solution_text, reasoning, parsed_matrix
+
+
+def run_evaluation(data_path, output_file):
+    results = []
+    correct_count = 0
+    
+    files = [f for f in os.listdir(data_path) if f.endswith('.json')]
+    for filename in files:
+        file_path = os.path.join(data_path, filename)
+        prob_name = Path(filename).stem # get just the ID
+        
+        with open(file_path, 'r') as f:
+            prob_data = json.load(f) # everything in the problem
+            gold_answer = prob_data['test'][0]['output'] # test output (correct answer)
+
+        print(f"Processing: {prob_name}")
+
+        raw_solution, reasoning, parsed_matrix = query_model(file_path) # get model output, reasoning, and answer
+        is_correct = (parsed_matrix == gold_answer) # check if answer matches test output
+        if is_correct:
+            correct_count += 1
+            print("correct")
+        else:
+            print("incorrect")
+
+        if parsed_matrix is None:
+            print("Null output")
+
+        record = {
+            "problem_name": prob_name,
+            "gold_standard": gold_answer,
+            "model_parsed_answer": parsed_matrix,
+            "is_correct": is_correct,
+            "raw_response": raw_solution,
+            "reasoning": reasoning
+        }
+        results.append(record)
+
+        with open(output_file, 'w') as f:
+            json.dump(results, f, indent=4) # save everything to JSON
+    
+    print(f"Total Correct: {correct_count}/{len(files)}")
+
+
+if __name__ == "__main__":
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = RESULTS_DIR / "v4flash_default_results.json"
+
+    run_evaluation(DATA_DIR, output_path)
