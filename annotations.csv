@@ -1,0 +1,105 @@
+task_id,category,grid_change,train_examples,color_relevant,rule,notes
+007bbfb7,geometric,TRUE,5,FALSE,"Fractal scaling. Each square in the 3×3 input becomes a copy of the entire 3×3 input pattern at that position in the 9×9 output.
+",Map problem. Sierpiski triangle-ish. 
+00d62c1b,relational_spatial,FALSE,5,FALSE,Fill in all fully enclosed (bounded on all 4 sides) squares with yellow. ,"Yellow is arbitrary color choice, irrelevant to relational logic"
+017c7c7b,pattern_completion,TRUE,3,FALSE,Extend pattern downward by 3 rows (1 period of the main pattern),
+025d127b,object_centric,FALSE,2,FALSE,"Using the L-shaped bottom/right part of the object as an anchor, shift the rest of the object over to the right by one square",
+05f2a901,relational_spatial,FALSE,3,TRUE,Shift the red/non-square shape so it is up against the (light blue) square,"Can either treat as shift non-square to square, or shift red --> light blue "
+06df4c85,relational_spatial,FALSE,3,TRUE,"If two 4x4 squares of the same color share the same row or column (alignment), fill the empty  4x4 squares between them with that color.",Color determines what squares to connect
+08ed6ac7,numerical,FALSE,2,TRUE,"Calculate height of each line and use that to determine color: tallest becomes blue, 2nd tallest becomes red, 3rd tallest becomes  green, shortest becomes yellow",Color is relevant in output
+0a938d79,pattern_completion,FALSE,4,TRUE,Extrapolate the alternating colored lines pattern and complete the sequence,relational + pattern completion
+0b148d64,object_centric,TRUE,3,TRUE,Output the square that's a different color from the rest,Color is the only relevant factor
+0ca9ddb6,object_centric,FALSE,3,TRUE,"Red squares --> add yellow squares around corners, blue squares --> add purple squares around sides, light blue/magenta squares --> do nothing",
+0d3d703e,object_centric,FALSE,4,TRUE,"Apply color correspondences (input green = output yellow, input light blue = output rust, etc)",
+0dfd9992,pattern_completion,FALSE,3,TRUE,Fill in the empty squares so the surrounding pattern is preserved,"""Mosaic"" pattern completion"
+0e206a2e,compositional,FALSE,3,TRUE,"Each object contains 3 uniquely colored squares. Compare them to the ""anchor point"" structures, and move the object so its 3 unique squares line up with matching anchor points",Anchor point problem
+10fcaaa3,compositional,TRUE,4,TRUE,"The entire grid is tiled in a 2x2 pattern. Each colored ""seed"" pixel from the input is the center of a 3x3 ""X"" shape. The center stays the original color, and the four diagonal neighbors become light blue. The light blue squares only appear where there is room.",geometric + object
+1a07d186,compositional,FALSE,3,TRUE,"Shift squares to the closest side of the line that shares the same color as them, otherwise delete them",
+1b2d62fb,compositional,TRUE,5,TRUE,"Overlay the 2 red shapes separated by the blue line, and whatever squares are not filled, output them in light blue",Blue line used to distinguish shapes to be overlayed
+1b60fb0c,geometric,FALSE,3,FALSE,Complete the shape (symmetry) and make the added piece red,"Red used to mark added piece, irrelevant to detecting pattern"
+1bfc4729,compositional,FALSE,2,TRUE,"Based on the vertical positions and colors of the 2 squares, build the frame border shape (with the seed squares being the inner side of the rectangle portions), where the top half is one color and the bottom half is the other",
+1c786137,object_centric,TRUE,3,TRUE,Output the content inside the single-colored frame,"Color helps delineate frame, but could solve by looking for frame shape instead"
+1caeab9d,relational_spatial,FALSE,3,TRUE,Shift the objects so they are lined up with the blue object,
+1cf80156,object_centric,TRUE,3,FALSE,Scale down the output grid so it borders the shape,
+1e0a9b12,relational_spatial,FALSE,3,FALSE,Slide all squares vertically down to the bottom of the grid,"""Tetris""/""gravity"" problem"
+1e32b0e9,compositional,FALSE,3,TRUE,Fix any empty or incomplete boxes in the large 9x9 grid so they all have the same shape; any additions/completions made should be the color of the grid lines,"""Tic tac toe"" grid"
+1f0c79e5,pattern_completion,FALSE,4,TRUE,"Starting from the red square(s), recursively expand the 2x2 block (pattern) diagonally until you hit the grid edge",
+1f642eb9,relational_spatial,FALSE,3,TRUE,"""Shoot"" a colored square at the light blue rectangle in a straight line. The square of the rectangle it hits, recolor to be the colored square's color",
+1f85a75f,object_centric,TRUE,2,TRUE,Identify the larger object amid the background noise (object has at least a 2x2 contiguous size),"Object is different color from noise, but could also use dimensions to solve"
+1f876c06,relational_spatial,FALSE,3,TRUE,"If two squares share the same color, build a diagonal line between them",
+1fad071e,numerical,TRUE,3,TRUE,"Count the number of 2x2 blue squares, then output that many 1x1 blue squares in a line",
+22eb0ac0,relational_spatial,FALSE,3,TRUE,"If the squares on both sides of the grid are the same color, build a line between them",
+23b5c85d,numerical,TRUE,5,TRUE,Output the smallest shape (square/rectangle); it will be a distinct color,Color used to distinguish overlapping rectangles in some cases
+25d487eb,compositional,FALSE,3,TRUE,"Determine which way the tip of the ""triangle"" object is pointing, then draw a line extending from the tip; line should be the color of the 1 differently colored square in the triangle",object + relational
+25d8a9c8,object_centric,FALSE,4,TRUE,"If a row of the input is all the same color, make it purple, otherwise, delete that row",
+25ff71a9,geometric,FALSE,4,FALSE,Move the shape down one row,Has 2 test cases
+27a28665,object_centric,TRUE,7,TRUE,"Shape to color mappings; X = red, + = magenta, kite = green, O = blue",Has 3 test cases
+28bf18c6,compositional,TRUE,3,FALSE,"Duplicate the shape to the right of the original shape, then resize the grid to border the duplicated shape",
+2bcee788,compositional,FALSE,4,TRUE,"Create a reflected version of the object on the red squares so it is now symmetrical, then fill in the background with green",geometric + object
+2bee17df,numerical,FALSE,3,FALSE,"Insert green lines where the distance between sides is the greatest (max height/width) 
+",
+2c608aff,relational_spatial,FALSE,4,TRUE,"If a straight line can be drawn between the X by X square and a single square of a different color, connect them with a line the color of the single square",
+2dc579da,object_centric,TRUE,3,TRUE,Output the quadrant that has one differently colored square,
+2dd70a9a,relational_spatial,FALSE,3,TRUE,"Connect the green line to the 2 red squares, turning to avoid hitting any of the light blue noise.",relational + object
+2dee498d,numerical,TRUE,3,TRUE,Slice and extract the first third of the rectangle,Like a backwards pattern completion (pattern extraction?)
+3aa6fb7a,object_centric,FALSE,2,FALSE,"Complete the 2x2 squares by adding a blue square
+","Blue used to mark added piece, irrelevant to detecting pattern"
+3ac3eb23,pattern_completion,FALSE,2,TRUE,"Starting from each seed, complete the checkerboard pattern in the same color",
+3af2c5a8,geometric,TRUE,3,FALSE,"Reflect the input around the origin clockwise 3 more times to create a symmetrical shape; map(x, y)to(-x, y), then(x, -y), and finally(-x, -y)",Could also reflect vertically then horizontally
+3bd67248,compositional,FALSE,3,FALSE,"Create a horizontal yellow line extending outward from the base of the vertical line, and a red diagonal line going up and right at the 45 degree angle",
+3bdb4ada,numerical,FALSE,2,FALSE,"In the middle row of each rectangle, delete every other square starting with the 2nd square",
+3befdf3e,compositional,FALSE,3,TRUE,"Swap colors of the middle square and outer squares, add 1x3 ""wings"" to each side, and make them the color of the current middle",
+3c9b0459,geometric,FALSE,4,FALSE,Rotate input 180 degrees,
+3de23699,compositional,TRUE,4,TRUE,"A shape is surrounded on 4 sides by different colored squares. Recolor the shape to be the squares' color, and output the shape",
+3e980e27,compositional,FALSE,4,TRUE,"Replace/expand the lone colored square into the full shape that uses that colored square. For the shape you create, if it uses a red square, it must be rotated 180 degrees, while if it uses a green shape, it stays the same as the original shape",
+3eda0437,numerical,FALSE,4,FALSE,"Calculate biggest contiguous X by Y gap (by area), and fill it with an magenta rectangle",
+3f7978a0,object_centric,TRUE,3,TRUE,Return the 2 vertical lines (purple with light blue tips) and any content between them,"Purple helps delineate lines, but could solve without"
+4be741c5,compositional,TRUE,3,TRUE,"ID the unique colors in the grid. See if they are arranged left-to-right, or top-to-bottom. Output a single-pixel wide strip of those colors that reflects that spatial order",
+4c4377d9,geometric,TRUE,4,FALSE,Vertical reflection upwards,
+4c5c2cf0,geometric,FALSE,3,FALSE,"Complete the circular pattern by copying the outer ""wing"" 3 more times around the inner core.  90° rotations to map the ""wings"" onto their respective quadrants",
+5ad4f10b,compositional,TRUE,3,TRUE,"Recolor the large object to the color of the background noise, then scale it down so it fits into a 3x3 grid",geometric + object
+5bd6f4ac,numerical,TRUE,4,FALSE,Slice and extract the top right 3x3 portion of the input grid ,
+5c0a986e,compositional,FALSE,3,TRUE,"Create a diagonal line extending out from the squares; for blue squares, the line goes up, for red squares, it goes down",
+5c2c9af4,compositional,FALSE,3,FALSE,"Use the middle of the 3 squares as the core of the spiral. Use the other 2 as guide points to create the innermost circle, then expanding the circle pattern repeatedly outward",
+5daaa586,compositional,TRUE,3,TRUE,"Shrink the grid to consist of the center box (with 4 different colored sides). Starting from each noise point inside the box, extend it to make a line that connects with the side of the box it shares the same color with",
+6a1e5592,compositional,FALSE,2,TRUE,"Slide the purple shapes up into the holes that fit them, then recolor them blue",Act of changing color means the shapes are in place
+6aa20dc0,compositional,FALSE,3,TRUE,"There is 1 complete object with 2 uniquely colored squares. Using the sets of 2 ""anchor points"" found around the grid, build more objects using the anchor points as guides. The objects may be scaled up from the original sometimes.",Anchor point problem
+6b9890af,compositional,TRUE,3,FALSE,"Move the non-box shape inside the red box, then scale it up to fit the box dimensions",Colors distinguish items but not necessary to solve
+6c434453,object_centric,FALSE,2,TRUE,Replace all 3x3 blue squares with red crosses,
+6cdd2623,compositional,FALSE,3,TRUE,"There are 4 points that share a unique color. Connect them to form 2 lines, then delete all other points (noise)",
+6cf79266,numerical,FALSE,3,FALSE,Fill in empty 3x3 spaces with a blue square,
+6d0160f0,compositional,FALSE,4,TRUE,"ID the grid square that has yellow in its pattern. Delete the content of all other squares. Treating the pattern in the remaining square as a map of the grid, move the pattern to the grid square represented by the yellow square",Map problem
+6d0aefbc,geometric,TRUE,4,FALSE,Reflect the shape horizontally to the right,
+6d58a25d,compositional,FALSE,3,TRUE,"If a noise point is underneath the triangle, turn it into a line extending up to the triangle and make it the color of the noise",object + relational
+6d75e8bb,pattern_completion,FALSE,3,FALSE,"Complete the rectangle, but make the added parts red",
+6e02f1e3,object_centric,FALSE,5,TRUE,"Solid colored row position determines output mapping shape; bottom row = downward diagonal, top row = upward diagonal, whole square = top horizontal",
+6e19193c,compositional,FALSE,2,FALSE,"Create diagonal line(s) going away from the ""opening""/bottom side of the 1x2 triangle shapes",
+6e82a1ae,numerical,FALSE,3,TRUE,"Size of shape determines output color: 2 squares = green, 3 squares = red, 4 squares = blue",
+6ecd11f4,compositional,TRUE,3,TRUE,"Use the smaller X by X square as a color map. Color the larger shape according to the map, then scale it down to the X by X square's size and output that",Map problem
+6f8cd79b,relational_spatial,FALSE,4,FALSE,Place a light blue border around the edges of the grid,
+6fa7a44f,geometric,TRUE,4,FALSE,Reflect the input vertically down,
+7b6016b9,relational_spatial,FALSE,3,TRUE,"Everything enclosed by the light blue lines gets filled red, everything outside them gets filled green",
+7b7f7511,numerical,TRUE,3,TRUE,Slice and extract one instance of the pattern that repeats 2 times (slice in half),Like a backwards pattern completion (pattern extraction?)
+7c008303,compositional,TRUE,3,TRUE,"Using the 2x2 colored square in the corner as a map, recolor the green object by dividing it into quadrants and coloring each quadrant according to the map, then output the object",Map problem
+7ddcd7ec,compositional,FALSE,3,FALSE,Extend the singular square(s) outward diagonally to the edge of the grid,
+7df24a62,compositional,FALSE,4,TRUE,"Based on the pattern of yellow noise enclosed by the blue square in the input, place blue squares around other groupings of yellow noise that match that pattern
+",
+7e0986d6,object_centric,FALSE,2,TRUE,"Get rid of light blue squares, either by deleting them if they are free-floating, or recoloring them if they are in a rectangle, to that rectangle's color",Cleaning up noise problem
+7f4411dc,object_centric,FALSE,3,FALSE,Delete any square not part of an X by X rectangle,Cleaning up noise problem
+7fe24cdd,geometric,TRUE,3,TRUE,Rotate the input 90 degrees 3 times around clockwise to build the final shape,
+8a004b2b,compositional,TRUE,3,TRUE,"Use the ""anchor points"" between the 4 yellow squares to build a larger version of the small shape",Anchor point problem
+8be77c9e,geometric,TRUE,3,FALSE,Reflect the input vertically down,
+8d5021e8,geometric,TRUE,3,FALSE,Mirro the 3x2 input horizontally to create a 3x4 block (symmetrical look in each row). Stack this 3x4 block three times vertically to fill the 9x4 grid. The middle section is the standard mirrored version.The top and bottom sections are vertically flipped versions of that mirrored block.,
+8d510a79,compositional,FALSE,2,TRUE,"Connect all red squares to the center purple line, connect all blue squares to the edge of the grid",
+8e1813be,compositional,TRUE,3,TRUE,"Using the lines as a color map, recolor each row or column of the square",Map problem
+8e5a5113,compositional,FALSE,3,TRUE,"Rotate the input 90 degrees, place it in between the purple lines, then repeat one more time",geometric + object
+8eb1be9a,pattern_completion,FALSE,2,FALSE,"Repeatedly copy the input above and below; if a copy does not completely fit in the grid, include the part that does",
+8efcae92,numerical,TRUE,3,TRUE,Output the blue shape with the most red squares in it,
+8f2ea7aa,compositional,FALSE,3,FALSE,"Using the input shape as a 3x3 map representing the 9x9 grid, copy the input shape into the positions given by the map",Map problem
+9aec4887,compositional,TRUE,3,TRUE,"Move the light blue shape inside the box. For each side of the shape, color the middle to match the same color as the side of the box. If the box sides are an odd number of squares, the middle will be the middle (single) square, if the box sides are an even number of squares, it will be the middle 2 squares.",
+9af7a82c,numerical,TRUE,4,TRUE,"""Expand"" each color of the square into a straight vertical line, and order them from longest to shortest (count number of squares for each color)",
+9d9215db,compositional,FALSE,3,TRUE,"Copy the input shape to the 4 corners of the grid, then connect the outermost squares to create a continuous frame",
+9dfd6313,geometric,FALSE,3,FALSE,Reflect the shape diagonally,
+9ecd008a,pattern_completion,TRUE,3,TRUE,Output the square that would be needed to preserve the surrounding pattern,"""Mosaic"" pattern completion"
+9edfc990,relational_spatial,FALSE,3,TRUE,Fill in the empty spaces with blue if it is possible to reach that area from an existing blue pixel,
+9f236235,compositional,TRUE,3,TRUE,"Create the shape formed by the colored boxes of the grid, then reflect it",
